@@ -1,0 +1,53 @@
+{% block content %}
+{% include "navbar.html" %}
+<style>
+    .d-flex.h1 {
+        text-align: center;
+        /* Center the heading */
+        margin-top: 50px;
+        /* Space above the heading */
+        margin-bottom: 20px;
+        /* Space below the heading */
+        font-family: 'Mitr', sans-serif;
+        /* Use the same font for the heading */
+    }
+
+    .accordion-container {
+        width: 80%;
+        /* Set the width of the accordion */
+        padding-bottom: 50px;
+        /* Add space at the bottom */
+        margin-bottom: 50px;
+        /* Ensure margin at the bottom of the container */
+    }
+</style>
+<title>รายละเอียดวิชา / Course</title>
+<div class="d-flex justify-content-center">
+    <div class="accordion-container">
+        <h1 style="text-align: center; margin-top: 3%;">รายละเอียดรายวิชา</h1>
+        <div class="accordion" id="accordionExample">
+            {% for course in course %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                    <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}"
+                        aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                        aria-controls="collapse{{ forloop.counter }}">
+                        <strong>{{ course.course_code }}</strong>&nbsp;{{ course.course_name }}
+                    </button>
+                </h2>
+                <div id="collapse{{ forloop.counter }}"
+                    class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                    aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>{{ course.course_name }}</strong></p>
+                        <p>หน่วยกิต: {{ course.course_credit }}</p>
+                        <p>{{ course.course_detail }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
