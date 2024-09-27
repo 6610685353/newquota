@@ -1,22 +1,19 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
-from django import forms
 from django.contrib.auth.models import User
-
-# Create your models here.
 
 
 class Student(models.Model):
-    username = models.CharField(max_length=10, unique=True) 
-    password = models.CharField(
-        max_length=20
-    )  
+    username = models.CharField(max_length=10, unique=True)
+    password = models.CharField(max_length=20)
     name = models.CharField(max_length=50)
     date = models.DateField(auto_now_add=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True, blank=True  # Allow null values
+    )
 
     def save(self, *args, **kwargs):
-        if self.pk is None:
+        if self.pk is None:  # Only hash the password if the object is being created
             self.password = make_password(self.password)
         super(Student, self).save(*args, **kwargs)
 
@@ -26,6 +23,7 @@ class Student(models.Model):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
+
 class Course(models.Model):
     course_code = models.CharField(max_length=6)
     course_name = models.CharField(max_length=80)
@@ -34,15 +32,16 @@ class Course(models.Model):
     course_section = models.CharField(max_length=6)
     course_remain = models.IntegerField(default=0)
     full = models.BooleanField(default=False)
-    students = models.ManyToManyField('Student', blank=True)
+    semester = models.CharField(max_length=1, choices=[("1", "1"), ("2", "2")])
+    year = models.CharField(max_length=4, null=True)
 
-    SEMESTER_CHOICES = [("1", "1"), ("2", "2")]
-    semester = models.CharField(max_length=1, choices=SEMESTER_CHOICES)
-    year = models.CharField(max_length=4, null=True) 
-
+    # Use one ManyToManyField instead of two
+    enrolled_students = models.ManyToManyField(
+        Student, blank=True, related_name="courses"
+    )
 
     class Meta:
         ordering = ["course_code"]
 
-    def str(self):
+    def __str__(self):
         return f"{self.course_code} - {self.course_name}"

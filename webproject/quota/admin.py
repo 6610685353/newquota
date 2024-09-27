@@ -1,6 +1,7 @@
 from django.contrib import admin
 from quota.models import Student, Course
 
+
 class CourseAdmin(admin.ModelAdmin):
     list_display = [
         "course_code",
@@ -15,8 +16,8 @@ class CourseAdmin(admin.ModelAdmin):
         "course_code",
         "course_name",
     ]
+    filter_horizontal = ("enrolled_students",)
 
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Student)
-
