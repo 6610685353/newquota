@@ -11,7 +11,7 @@ class CourseAdmin(admin.ModelAdmin):
         "course_remain",
         "full",
     ]
-    list_filter = ["full"]
+    list_filter = ["full","semester","year"]
     search_fields = [
         "course_code",
         "course_name",

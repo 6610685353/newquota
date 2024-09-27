@@ -35,16 +35,23 @@ def login_view(request):
 
 @login_required
 def index_view(request):
+    selected_year = request.GET.get('year')
+    selected_semester = request.GET.get('semester')
+
     all_courses = Course.objects.all()
-    try:
-        enrolled_courses = request.user.student.courses.all()
-    except Student.DoesNotExist:
-        enrolled_courses = []
-    return render(
-        request,
-        "index.html",
-        {"all_courses": all_courses, "enrolled_courses": enrolled_courses},
-    )
+    if selected_year:
+        all_courses = all_courses.filter(year=selected_year)
+    if selected_semester:
+        all_courses = all_courses.filter(semester=selected_semester)
+
+    context = {
+        'all_courses': all_courses,
+        'years': sorted(set(Course.objects.values_list('year', flat=True).distinct())),
+        'semesters': sorted(set(Course.objects.values_list('semester', flat=True).distinct())),
+        'selected_year': selected_year,
+        'selected_semester': selected_semester,
+    }
+    return render(request, 'index.html', context)
 
 
 @login_required
