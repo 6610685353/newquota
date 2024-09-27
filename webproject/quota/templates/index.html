@@ -46,7 +46,7 @@
             setTimeout(function () {
                 var alert = new bootstrap.Alert(alertContainer);
                 alert.close();
-            }, 5000); // 5000 milliseconds = 5 seconds
+            }, 5000);
         }
     };
 </script>
@@ -54,10 +54,13 @@
 <title>หน้าแรก / Home </title>
 
 <div class="enroll-table">
+    {% if messages %}
     <div class="alert alert-success alert-dismissible fade show" role="alert" id="loginAlert">
-        <strong>Login successful!</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
     </div>
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -77,17 +80,20 @@
                 <th>รหัสวิชา</th>
                 <th>SECTION</th>
                 <th>ชื่อวิชา</th>
+                <th>ปีการศึกษา</th>
                 <th>หน่วยกิต</th>
                 <th>จำนวนที่นั่งที่เหลือ</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
+
             {% for info in all_courses %}
             <tr>
                 <td>{{ info.course_code }}</td>
                 <td>{{ info.course_section }}</td>
                 <td>{{ info.course_name }}</td>
+                <td>{{ info.semester }}/{{info.year}}</td>
                 <td>{{ info.course_credit }}</td>
                 <td>{{ info.course_remain }}</td>
 

@@ -52,8 +52,8 @@
                 <td>{{ course.course_credit }}</td>
                 <td class="enroll-status">สำเร็จ</td>
                 <td>
-                    <!-- Withdraw Button with Confirmation -->
-                    <form method="post" action="{% url 'withdraw' course.id %}" onsubmit="return confirm('Are you sure you want to withdraw from {{ course.course_name }}?');">
+                    <form method="post" action="{% url 'withdraw' course.id %}"
+                        onsubmit="return confirm('Are you sure you want to withdraw from {{ course.course_name }}?');">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-warning withdraw-button">ถอน</button>
                     </form>

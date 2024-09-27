@@ -9,11 +9,11 @@ class Student(models.Model):
     name = models.CharField(max_length=50)
     date = models.DateField(auto_now_add=True)
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True  # Allow null values
+        User, on_delete=models.CASCADE, null=True, blank=True 
     )
 
     def save(self, *args, **kwargs):
-        if self.pk is None:  # Only hash the password if the object is being created
+        if self.pk is None: 
             self.password = make_password(self.password)
         super(Student, self).save(*args, **kwargs)
 
@@ -35,7 +35,7 @@ class Course(models.Model):
     semester = models.CharField(max_length=1, choices=[("1", "1"), ("2", "2")])
     year = models.CharField(max_length=4, null=True)
 
-    # Use one ManyToManyField instead of two
+
     enrolled_students = models.ManyToManyField(
         Student, blank=True, related_name="courses"
     )

@@ -10,7 +10,7 @@ from .models import Course
 
 
 def all_students(request):
-    all_students = Student.objects.all()  # Correct to plural
+    all_students = Student.objects.all()
     return render(request, "login.html", {"all_students": all_students})
 
 
@@ -67,6 +67,7 @@ def quota_status(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, "Logout successful")
     return redirect("login")
 
 
@@ -75,20 +76,19 @@ def enroll_view(request, course_id):
     student = get_object_or_404(Student, user=request.user)
     course = get_object_or_404(Course, id=course_id)
 
-    # Check if the course is already full or if the student is already enrolled
     if course.full:
         messages.error(request, "This course is full.")
         return redirect("course_index")
 
-    if student in course.enrolled_students.all():  # Check if already enrolled
+    if student in course.enrolled_students.all(): 
         messages.error(request, "You are already enrolled in this course.")
         return redirect("quota_status")
 
-    # Enroll the student in the course
+
     course.enrolled_students.add(student)
-    course.course_remain -= 1  # Decrease available seats
+    course.course_remain -= 1  
     if course.course_remain <= 0:
-        course.full = True  # Mark course as full if no seats remain
+        course.full = True 
     course.save()
 
     messages.success(request, f"Successfully enrolled in {course.course_name}!")
@@ -100,11 +100,10 @@ def withdraw_view(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 
     if request.method == "POST":
-        # Remove the student from the course
         course.enrolled_students.remove(student)
-        course.course_remain += 1  # Increase available seats by 1
+        course.course_remain += 1
         if course.course_remain > 0:
-            course.full = False  # Set course as not full
+            course.full = False
         course.save()
 
         messages.success(request, f"Successfully withdrawn from {course.course_name}.")

@@ -3,20 +3,20 @@
 <style>
     .d-flex.h1 {
         text-align: center;
-        /* margin-top: 50px; */
+        margin-top: 50px;
         margin-bottom: 20px;
-        font-family: 'Mitr', sans-serif;
+        font-family: 'Mitr';
     }
 
     .accordion-container {
         width: 80%;
         padding-bottom: 50px;
         margin-bottom: 50px;
-        margin: auto;  /* Center the accordion on the page */
+        margin: auto;
     }
 
     h2 {
-        font-family: 'Mitr', sans-serif;
+        font-family: 'Mitr';
     }
 </style>
 
@@ -34,6 +34,7 @@
                         aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
                         aria-controls="collapse{{ forloop.counter }}">
                         <strong>{{ info.course_code }}</strong>&nbsp;{{ info.course_name }}
+                        [{{info.semester}}/{{info.year}}]
                     </button>
                 </h2>
                 <div id="collapse{{ forloop.counter }}"
