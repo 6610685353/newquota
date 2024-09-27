@@ -20,9 +20,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             if user.get_username() == "admin":
-                return redirect(
-                    reverse("admin:index")
-                )  # Use reverse to redirect to admin
+                return redirect(reverse("admin:index")) 
             else:
                 login(request, user)
                 messages.success(request, "Login successful!")
@@ -69,7 +67,6 @@ def quota_status(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, "You have been logged out.")
     return redirect("login")
 
 
